@@ -1,0 +1,16 @@
+/* Wordart style was ripped from Katherine Kato: https://www.katherinekato.com */
+/* In particular, from this codepen: https://codepen.io/kathykato/pen/omxPap */
+
+.wordart {
+    position: relative;
+    display: inline-block;
+    transform: scaleY(1.25);
+    font-family: Impact, sans-serif;
+    color: #0066cc;
+    -webkit-text-fill-color: #0066cc;
+    -webkit-text-stroke: 0.016em #99ccff;
+    -webkit-background-clip: text;
+    background-clip: text;
+    z-index: -1;
+    text-shadow: 0.094em 0.078em #990000;
+}
