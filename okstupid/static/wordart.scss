@@ -1,7 +1,8 @@
-/* Wordart style was ripped from Katherine Kato: https://www.katherinekato.com */
+/* Wordart styles were ripped from Katherine Kato: https://www.katherinekato.com */
 /* In particular, from this codepen: https://codepen.io/kathykato/pen/omxPap */
 
-.wordart {
+h1 {
+    font-family: "Arial";
     position: relative;
     display: inline-block;
     transform: scaleY(1.25);
@@ -11,6 +12,26 @@
     -webkit-text-stroke: 0.016em #99ccff;
     -webkit-background-clip: text;
     background-clip: text;
-    z-index: -1;
+    // z-index: -1;
     text-shadow: 0.094em 0.078em #990000;
+}
+
+h2 {
+    font-family: "Arial";
+    font-weight: 900;
+    color: transparent;
+    background: linear-gradient(to left, #a104ad, #0b2be0, #329941, #f7f658, #f16412, #e92153, #aa04a7);
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0.016em #eaeaea;
+    -webkit-background-clip: text;
+    background-clip: text;
+    letter-spacing: 0.1rem;
+    &::before {
+        @include pseudo;
+        z-index: -1;
+        color: #cdcdcd;
+        -webkit-text-fill-color: #cdcdcd;
+        -webkit-text-stroke: transparent;
+        transform: rotateX(63deg) skew(60deg) scaleY(0.65) translate3d(2em, -2.15em, -1em);
+    }
 }
