@@ -19,3 +19,11 @@ def cat():
         html = markdown.markdown(fh.read())
 
     return render_template("main.html", mkd_text=html)
+
+
+@app.route("/ev")
+def ev():
+    with open("okstupid/static/ev_conversion.md", 'r') as fh:
+        html = markdown.markdown(fh.read())
+
+    return render_template("main.html", mkd_text=html)
