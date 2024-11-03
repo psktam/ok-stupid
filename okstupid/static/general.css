@@ -12,3 +12,13 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
 }
+
+.cat-image{
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+}
+.cat-content{
+    height: 90vh;
+    width: 100%;
+}

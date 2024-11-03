@@ -3,7 +3,7 @@ This is Mr. Rogers, or Fred. Or Freddie, or Freddily Beddily, or
 Skrimbles, or Skrimbly, or Skrimbly Bimbly, or Skrimblors, or...
 
 <figure>
-  <img src="static/fred1.jpg" width="800"/>
+  <img src="static/freddi-images/fred1.jpg" width="800"/>
   <figcaption>Look into his dreamy eyes.</figcaption>
 </figure>
 
@@ -24,7 +24,7 @@ in the distance. I decided I'd try to make my life a little bit more
 magical by feeding them and thus hopefully befriending them.
 
 <figure>
-  <img src="static/freddi-appearance.jpg", width="800"/>
+  <img src="static/freddi-images/freddi-appearance.jpg", width="800"/>
   <figcaption>Freddie's first appearance. April 5, 2020</figcaption>
 </figure>
 
@@ -53,13 +53,13 @@ tried to resist for a little bit.
 <div class="grid-container">
     <div class="grid-item">
         <figure>
-            <img src="static/freddi-2.jpg" width="400"/>
+            <img src="static/freddi-images/freddi-2.jpg" width="400"/>
             <figcaption>Freddie frolicking</figcaption>
         </figure>
     </div>
     <div class="grid-item">
         <figure>
-            <img src="static/freddi-3.jpg" width="400"/>
+            <img src="static/freddi-images/freddi-3.jpg" width="400"/>
             <figcaption>He just walked right in</figcaption>
         </figure>
     </div>
@@ -87,7 +87,7 @@ just sitting out front with the rain falling around him, meowing
 to be let in nearly shattered my heart.
 
 <figure>
-    <img src="static/fred-and-me-1.jpg" width="800"/>
+    <img src="static/freddi-images/fred-and-me-1.jpg" width="800"/>
     <figcaption>this is how he likes to sleep</figcaption>
 </figure>
 
@@ -119,27 +119,4 @@ each time. My sibling started calling him Freddie, and that
 name has since stuck, along with a million other mutations 
 of that name.
 
-## Select Photos
-
-<figure>
-    <img src="static/freddi-brave.jpg" width="800"/>
-    <figcaption>Freddie being brave against thunder</figcaption>
-</figure>
-
-<figure>
-    <img src="static/freddi-yawn.jpg" width="800"/>
-    <figcaption>beeeg yawn</figcaption>
-</figure>
-
-<figure>
-    <img src="static/fred-perlman.jpg" width="800"/>
-    <figcaption>haha he looks like Ron Perlman from this angle</figcaption>
-</figure>
-
-<figure>
-    <img src="static/fred-and-tom.jpg" width="800"/>
-    <figcaption>
-        Freddie with my parents' cat, Tom. They don't like
-        each other, but they have their moments.
-    </figcaption>
-</figure>
+[click to get random photos of Freddi](cat/freddi)
