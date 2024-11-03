@@ -1,4 +1,23 @@
 - path: "fred-and-me-1.jpg"
-  caption: "Love"
+  caption: "Freddi's tuck-in ritual"
 - path: "fred-and-tom.jpg"
-  caption: "Another love"
+  caption:
+    "The black cat is my parents' cat. His name is Tom. They don't
+    really get along, but this is one of those rare moments in
+    which they did. So magical."
+- path: "fred-perlman.jpg"
+  caption:
+    "heheh he looks like Ron Perlman in this picture"
+- path: "fred1.jpg"
+  caption: "So dreamy eyes. What is going on in his little brain?"
+- path: "freddi-2.jpg"
+  caption: "I think I snapped this the day that he first showed up in my patio"
+- path: "freddi-3.jpg"
+  caption: "His first steps into my home"
+- path: "freddi-appearance.jpg"
+  caption: "The day he first showed up and changed my life 5ever"
+- path: "freddi-brave.jpg"
+  caption: "Whenever it starts to thunder, he likes to go under my blankets
+    so that he can be brave there. Look at how brave he is."
+- path: "freddi-yawn.jpg"
+  caption: "beeeeg yawn"

@@ -4,7 +4,6 @@ import random
 from flask import Flask, render_template
 import json
 import markdown
-from PIL import Image, ImageOps
 import yaml
 
 
@@ -72,10 +71,6 @@ def get_new_freddi_image():
         img_to_return,
         {"path": img_to_return, "caption": "Freddi luvs u"}
     )
-
-    with Image.open(os.path.join(filepath_base, img_to_return)) as img:
-        rotated = ImageOps.exif_transpose(img)
-        img_spec["size"] = list(rotated.size)
 
     return json.dumps(img_spec)
 

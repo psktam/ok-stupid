@@ -8,12 +8,10 @@ function pickNewImage(catName, contentContainerId) {
         var image = document.createElement("img");
         image.setAttribute("src", "/static/" + catName + "-images/" + data["path"]);
         image.setAttribute("class", "cat-image");
-        var aspectRatio = data["size"][0] / data["size"][1];
-        var maxDimension = 95;
-        // } else {
-        //     image.style.height = maxDimension.toString() + "em";
-        //     image.style.width = (maxDimension * aspectRatio).toString() + "em";
-        // }
         contentElement.appendChild(image);
+
+        var caption = document.createElement("span");
+        caption.innerHTML = "</br></br>" + data["caption"];
+        contentElement.appendChild(caption);
     });
 }
