@@ -19,7 +19,7 @@ _TRACKS = {
 
 @app.route("/")
 def main():
-    with open("okstupid/static/main_splash.md", 'r') as fh:
+    with open("okstupid/static/markdowns/main_splash.md", 'r') as fh:
         html = markdown.markdown(fh.read())
     return render_template(
         "main.html",
@@ -30,7 +30,7 @@ def main():
 
 @app.route("/cat")
 def cat():
-    with open("okstupid/static/cat.md", 'r') as fh:
+    with open("okstupid/static/markdowns/cat.md", 'r') as fh:
         html = markdown.markdown(fh.read())
 
     return render_template(
@@ -77,7 +77,19 @@ def get_new_freddi_image():
 
 @app.route("/ev")
 def ev():
-    with open("okstupid/static/ev_conversion.md", 'r') as fh:
+    with open("okstupid/static/markdowns/ev_conversion.md", 'r') as fh:
+        html = markdown.markdown(fh.read())
+
+    return render_template(
+        "main.html",
+        mkd_text=html,
+        music_id=_TRACKS["space lion"]
+    )
+
+
+@app.route("/more-about-me")
+def more_about_me():
+    with open("okstupid/static/markdowns/more_about_me.md", 'r') as fh:
         html = markdown.markdown(fh.read())
 
     return render_template(
