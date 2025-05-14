@@ -144,7 +144,7 @@ lbs, and each battery module alone weighs about 55 lbs.
 Taking this into consideration, I'm going to stick about 3 of the modules where 
 the fuel tank used to go, and then everything else in the engine bay.
 
-# The Build
+# The Build (so far)
 ## The Teardown
 There are two major phases to this part of the build: removal of the engine and
 removal of the fuel tank. I decided to start with the removal of the fuel tank
@@ -187,9 +187,11 @@ car. They just would not budge. I sprayed them with penetrating oil as best as
 I could (access was terrible). Heating was out of the question because A: I 
 didn't have a blowtorch and B: the part of the bolt I needed to heat up was
 deep inside the chassis of the car, whereas I only had access to the head of 
-the bolt. So, without really thinking about what terrible things might possibly
-happen, I decided to just go unga bunga mode, made a 3-foot long cheater bar, 
-and started rowing on those bolts, starting with the right side.
+the bolt. Oh, and C was the fact that this was right next to the fuel tank,
+and I don't really trust my aim with a blowtorch. So, without really thinking 
+about what terrible things might possibly happen, I decided to just go unga 
+bunga mode, made a 3-foot long cheater bar, and started rowing on those bolts, 
+starting with the right side.
 
 Even with the 3-foot cheater, it was _work_ getting that damn bolt to turn even
 just one click on the ratchet that I was using. With each heave of the bar, it
@@ -205,3 +207,95 @@ louder than all the previous ones, and the bolt suddenly began to turn
 suspiciously more smoothly. When I finally pulled it out, it was exactly what I 
 feared: it had snapped. And so began a very, very terrible ordeal that lasted me
 a whole 3 months.
+
+<figure>
+    <img src="static/broken-bolt.png" />
+    <figcaption>fuuuuuuuuuuuuck</figcaption>
+</figure>
+
+## That fuckin' bolt
+Mercifully, I was able to get the last bolt on the left side out as well, 
+although that one also put up a terrific fight. So I was left with just this
+bolt on the right side. After reading some forum posts, I decided to do the 
+easy, foolish thing and drilled out a big hole in the center of my stuck bolt
+and bought a 5/8" bolt extractor. I then stuck that on the end of my breaker bar 
+and pulled as hard as I could.
+
+Obviously, I don't learn from my mistakes. I should have slowed down at some 
+point and realized that I was doing exactly the same thing that got me into the
+mess I now found myself and was expecting it to somehow not only not happen 
+again, but somehow reverse the course of what I did and put everything back to
+normal. Like pulling out my teeth in order to get rid of a toothache.
+
+Well, d'uh, the extractor broke off inside the bolt. What's worse, the fracture
+plane was flush with the surface of the surrounding metal, meaning I couldn't
+get a pair of pliers on whatever was exposed and hope to fish it out.
+
+This is where I basically gave up, for a good long while. There were other
+forum posts saying that you maybe sorta coulda maybe get away with only have
+3 out of the 4 subframe bolts securing it to the chassis, but I couldn't 
+bring myself to be comfortable with that thought, regardless of how correct
+that might be. Yet, I had no idea how I'd be able to proceed with things the 
+way they were now. I tried drilling the extractor out, but it was made of much
+harder metal than the bolt, and my bit just skidded all over the surface.
+
+So I did what any man of action does when the way forward is unclear: I ran away
+and tried not thinking about it. I did this for about three months, where I'd
+occassionally have the thought "hey, I should do something about this", only to 
+immediately answer myself with "naaah, I'll do that later".
+
+I couldn't avoid it forever, though. I mean, it was an entire car just sitting 
+in pieces in my garage, just taking up space. I finally decided fuck it, I'm
+just going to leave that bolt there, and I'd essentially weld a long nut over
+it. I've never welded anything before, though. And scrolling through Weldtok,
+you'd think that it was an esoteric, arcane art that should only be attempted by
+the ones who are worthy. They aren't wrong, but at the same time, it's still 
+quite easy to make disgusting welds that at least hold things together, and 
+that's all I needed. There's a metal supplier in Austin, 
+[Westbrook Metals](https://www.westbrookmetals.com) that everyone should know 
+about. They let me pick a 1-foot piece of mild steel from their drop zone and 
+didn't even charge me for it. I cut off about a 1.5 inch section of it and 
+drilled and tapped a 14mm x 1.5 thread into it, and welded it over the bolt.
+
+<figure>
+    <img src="static/ugly-ass-weld.png"/>
+    <figcaption>
+        A grinder and paint can't make a good welder
+    </figcaption>
+</figure>
+
+This... went a lot smoother than I thought it would, and it was gratifying to 
+see that everything lined up with the subframe. I still had a little bit of 
+cleanup to do here, though. 
+
+<figure>
+    <img src="static/spacer.png"/>
+    <figcaption>
+        here's the spacer that's supposed to go between the subframe and the 
+        chassis
+    </figcaption>
+</figure>
+
+The subframe doesn't sit directly on the chassis, 
+instead it's supposed to sit on an aluminum spacer that goes between the two of
+them. Because of that weld bead on the nut, however, that spacer was unable to 
+sit flat with the chassis like it's supposed to, so I made a custom "washer" 
+with a large chamfer on it to make room for the weld bead to fit inside.
+
+<figure>
+    <img src="static/weld-washer.png"/>
+    <figcaption>
+        the part I made; I feel so cool
+    </figcaption>
+</figure>
+
+I was able to knock that out pretty quickly, though, and I was pretty happy with 
+the way things turned out. This wasn't perfect, and who knows how well this
+setup would hold up over regular usage of the car? That being said, I just 
+wanted to move on with my life on this project. Reassembling the rest of the 
+rear end took about two days for me to do, mostly wrestling with getting all 
+the suspension links reconnected to the subframe (what a _pain_), and remounting
+the rear differential. But after I did that, I declared this chapter of the
+build _over_.
+
+## Battery Boxes
