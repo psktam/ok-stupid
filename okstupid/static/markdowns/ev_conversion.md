@@ -298,4 +298,7 @@ the suspension links reconnected to the subframe (what a _pain_), and remounting
 the rear differential. But after I did that, I declared this chapter of the
 build _over_.
 
-## Battery Boxes
+## What's Next
+At this point, I've catalogued pretty much everything worth talking about in 
+this build so far, so I'm going to switch formats from this overarching
+expository style to a blog format. You can catch up on that [here](/ev/blog).
