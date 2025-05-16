@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import random
 
@@ -27,6 +28,7 @@ def main():
         html = markdown.markdown(fh.read())
     return render_template(
         "main.html",
+        title="welcome to a life",
         mkd_text=html,
         music_id=_TRACKS["welcome to my life"]
     )
@@ -39,6 +41,7 @@ def cat():
 
     return render_template(
         "main.html",
+        title="mah boi",
         mkd_text=html,
         music_id=_TRACKS["space lion"]
     )
@@ -86,8 +89,53 @@ def ev():
 
     return render_template(
         "main.html",
+        title="EV",
         mkd_text=html,
         music_id=_TRACKS["space lion"]
+    )
+
+
+@app.route("/ev/blog")
+def ev_blog():
+
+    # Generate a markdown string of a list of links of blog entries
+    link_list = generate_blog_nav_md()
+
+    return render_template(
+        "main.html",
+        title="EV",
+        mkd_text=markdown.markdown(link_list),
+        music_id=_TRACKS["space lion"]
+    )
+
+
+def generate_blog_nav_md():
+    blog_files = os.listdir("okstupid/ev_blog")
+    dates_to_files = {
+        datetime.strptime(os.path.splitext(fname)[0], "%m-%d-%Y"): fname
+        for fname in blog_files
+    }
+
+    text = ""
+    for date in sorted(dates_to_files.keys()):
+        link_url = f"/ev/blog/{date.strftime("%m-%d-%Y")}"
+        md_line = f"- [{date.strftime('%m-%d-%Y')}'s entry]({link_url})"
+        text += md_line + "\n"
+    return text
+
+
+@app.route("/ev/blog/<blog_date>")
+def get_ev_blog_page(blog_date):
+    with open(os.path.join("okstupid/ev_blog", blog_date) + ".md", 'r') as fh:
+        html = markdown.markdown(fh.read())
+
+    song = random.choice(list(_TRACKS.keys()))
+
+    return render_template(
+        "main.html",
+        title="EV blog",
+        mkd_text=html,
+        music_id=_TRACKS[song]
     )
 
 
@@ -98,6 +146,7 @@ def more_about_me():
 
     return render_template(
         "main.html",
+        title="more sincere",
         mkd_text=html,
         music_id=_TRACKS["space lion"]
     )
