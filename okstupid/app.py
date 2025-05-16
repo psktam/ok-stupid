@@ -118,7 +118,7 @@ def generate_blog_nav_md():
 
     text = ""
     for date in sorted(dates_to_files.keys()):
-        link_url = f"/ev/blog/{date.strftime("%m-%d-%Y")}"
+        link_url = f"/ev/blog/{date.strftime('%m-%d-%Y')}"
         md_line = f"- [{date.strftime('%m-%d-%Y')}'s entry]({link_url})"
         text += md_line + "\n"
     return text
