@@ -74,7 +74,7 @@ which is 220 N-m, but since all that torque is developed almost instantaneously,
 and it can maintain this output at high efficiency, I'm more than happy to take 
 that very slight knockdown in peak torque.
 
-![image](static/hyper9_144V_perf_curves.jpg)
+![image](static/hyper9_144V_perf_curves.png)
 
 ### 3. Other Accessories
 There are a bunch of other things that factor into the build that all have to
