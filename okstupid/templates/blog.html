@@ -1,0 +1,45 @@
+<title>{{title}}</title>
+<head>
+    <link rel="stylesheet" href="/static/wordart.scss">
+    <link rel="stylesheet" href="/static/general.css">
+    <link rel="stylesheet" href="/static/blog-style.css">
+    <script src="/static/scripts/yt_playbutton.js"></script>
+</head>
+
+<style>
+    body {
+        background-image: url('/static/maxie-boi.gif');
+        font-family: "Comic Sans MS";
+    }
+</style>
+
+<body>
+
+<div>
+<div id="nav-sidebar">
+    <h1>Entries</h1>
+    </br>
+    {{ nav_buttons | safe }}
+    {{ nav_text | safe }}
+</div>
+
+<div class="content">
+    {{mkd_text | safe}}
+</div>
+
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<div style="position: fixed; bottom: 0px; background: green">
+    Go back <a href="/">home 🏠</a> || Play Music! 👉
+    <div
+        data-video={{music_id | safe}}
+        data-autoplay="0"
+        data-loop="1"
+        id="youtube-audio"
+        style="display:inline"
+    ></div>
+</div>
+</br>
+</body>

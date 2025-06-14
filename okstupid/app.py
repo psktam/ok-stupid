@@ -5,8 +5,11 @@ import random
 from flask import Flask, render_template
 import json
 import markdown
+import plotly.graph_objects as go
 from werkzeug.middleware.proxy_fix import ProxyFix
 import yaml
+
+from . import blog
 
 
 app = Flask(__name__)
@@ -99,7 +102,7 @@ def ev():
 def ev_blog():
 
     # Generate a markdown string of a list of links of blog entries
-    link_list = generate_blog_nav_md()
+    link_list = blog.generate_blog_nav_md()
 
     return render_template(
         "main.html",
@@ -109,32 +112,23 @@ def ev_blog():
     )
 
 
-def generate_blog_nav_md():
-    blog_files = os.listdir("okstupid/ev_blog")
-    dates_to_files = {
-        datetime.strptime(os.path.splitext(fname)[0], "%m-%d-%Y"): fname
-        for fname in blog_files
-    }
-
-    text = ""
-    for date in sorted(dates_to_files.keys()):
-        link_url = f"/ev/blog/{date.strftime('%m-%d-%Y')}"
-        md_line = f"- [{date.strftime('%m-%d-%Y')}'s entry]({link_url})"
-        text += md_line + "\n"
-    return text
-
-
 @app.route("/ev/blog/<blog_date>")
 def get_ev_blog_page(blog_date):
     with open(os.path.join("okstupid/ev_blog", blog_date) + ".md", 'r') as fh:
         html = markdown.markdown(fh.read())
 
+    blog_date_dt = datetime.strptime(blog_date, "%m-%d-%Y")
+    blog_nav_txt = markdown.markdown(blog.generate_blog_nav_md())
+    blog_nav_buttons = blog.generate_nav_buttons(blog_date_dt)
+
     song = random.choice(list(_TRACKS.keys()))
 
     return render_template(
-        "main.html",
+        "blog.html",
         title="EV blog",
+        nav_text=blog_nav_txt,
         mkd_text=html,
+        nav_buttons=blog_nav_buttons,
         music_id=_TRACKS[song]
     )
 
@@ -148,5 +142,24 @@ def more_about_me():
         "main.html",
         title="more sincere",
         mkd_text=html,
+        music_id=_TRACKS["space lion"]
+    )
+
+@app.route("/plotly-demo")
+def plotly_demo():
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=[0, 1, 2],
+            y=[2, 1, 1]
+        )
+    )
+
+    figjson = fig.to_json()
+
+    return render_template(
+        "plotly_page.html",
+        title="plotly demo",
+        graph_json=figjson,
         music_id=_TRACKS["space lion"]
     )

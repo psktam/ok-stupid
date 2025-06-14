@@ -36,7 +36,8 @@ free to friend me
 
 ## Things I'm Up To
 
-- [EV Conversion](ev)
+- [EV Conversion](/ev)
+    - [Running blog](/ev/blog)
 
 ## More About Me
 
