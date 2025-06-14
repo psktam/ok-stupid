@@ -1,5 +1,8 @@
+arguably
 flask==3.0.0
 gunicorn
 markdown
+numpy
 Pillow
+plotly
 pyyaml
