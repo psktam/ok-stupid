@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Comic Sans MS';
+    src: url('/static/fonts/COMIC.TTF');
+}
+
 .center {
     display: block;
     margin-left: auto;
@@ -7,6 +12,10 @@
 .content {
     background: rgba(255, 255, 255, 0.9);
     max-width: 50em;
+}
+
+.content > figure > img {
+    width: 700px;
 }
 
 .grid-container {
@@ -24,5 +33,5 @@
     width: 100%;
     background: rgba(255, 255, 255, 0.9);
     vertical-align: top;
-    display: inline-block:
+    display: inline-block;
 }
