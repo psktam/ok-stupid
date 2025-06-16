@@ -10,12 +10,14 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 import yaml
 
 from . import blog
+from .dank_memes import MEMES
 
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(
     app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
 )
+app.register_blueprint(MEMES, url_prefix="/memes")
 
 
 _TRACKS = {

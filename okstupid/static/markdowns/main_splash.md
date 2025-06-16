@@ -21,7 +21,7 @@ free to friend me
   Boxster S, 2003 Subaru Baja)
 - Rock-climbing (it has been a while since I've gone, though)
 - [Karaoke](karaoke-list)
-- dank memes
+- [dank memes](/memes)
 
 ## Things I Don't Like
 
