@@ -1,0 +1,41 @@
+<title>{{title}}</title>
+<head>
+    <link rel="stylesheet" href="/static/wordart.scss">
+    <link rel="stylesheet" href="/static/general.css">
+    <script src="/static/scripts/yt_playbutton.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<style>
+    body {
+        background-image: url('/static/maxie-boi.gif');
+        font-family: "Comic Sans MS";
+    }
+</style>
+
+<body>
+
+<div class="content">
+<div id="graphy"></div>
+</div>
+
+<script type="text/javascript">
+    var graph_json = {{graph_json | safe}};
+    Plotly.plot("graphy", graph_json, {});
+
+</script>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<div style="position: fixed; bottom: 0px; background: green">
+    Go back <a href="/">home 🏠</a> || Play Music! 👉
+    <div
+        data-video={{music_id | safe}}
+        data-autoplay="0"
+        data-loop="1"
+        id="youtube-audio"
+        style="display:inline"
+    ></div>
+</div>
+</br>
+</body>
