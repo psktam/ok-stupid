@@ -100,23 +100,23 @@ def ev():
     )
 
 
-@app.route("/ev/blog")
-def ev_blog():
+@app.route("/blog")
+def blog_():
 
     # Generate a markdown string of a list of links of blog entries
     link_list = blog.generate_blog_nav_md()
 
     return render_template(
         "main.html",
-        title="EV",
+        title="my blog",
         mkd_text=markdown.markdown(link_list),
         music_id=_TRACKS["space lion"]
     )
 
 
-@app.route("/ev/blog/<blog_date>")
-def get_ev_blog_page(blog_date):
-    with open(os.path.join("okstupid/ev_blog", blog_date) + ".md", 'r') as fh:
+@app.route("/blog/<blog_date>")
+def get_blog_page(blog_date):
+    with open(os.path.join("okstupid/blog", blog_date) + ".md", 'r') as fh:
         html = markdown.markdown(fh.read())
 
     blog_date_dt = datetime.strptime(blog_date, "%m-%d-%Y")

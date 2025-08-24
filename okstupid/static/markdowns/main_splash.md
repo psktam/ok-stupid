@@ -1,5 +1,12 @@
 # Hello
-<img src="static/profile.jpg" width="400"/>
+<figure>
+  <img src="static/profile.jpg" width="400"/>
+  <figcaption>
+    Canvassing for Z in Queens, June 2025. 
+    I'm the guy on the left. The handsome man on the right is
+    my good friend Jay.
+  </figcaption>
+</figure>
 
 My name is Peter Kim. I live in Austin with my cat, Mr. Rogers,
 though I typically just call him Freddie. He's a dusty orange-
@@ -26,7 +33,7 @@ free to friend me
 ## Things I Don't Like
 
 - Running
-- AI
+- The AI as a tool for grifters
 - NFT and Bitcoin huns
 - Too much sarcasm; not everything has to be a Joss Whedon 
   screenplay
@@ -37,12 +44,10 @@ free to friend me
 ## Things I'm Up To
 
 - [EV Conversion](/ev)
-    - [Running blog](/ev/blog)
-
-## More About Me
-
-Follow [this](more-about-me) link for a more sincere 
-description of who I am.
+- [Austin DSA](https://austindsa.org)
+    - You should join! I do a lot of stuff with Austin DSA. Maybe at some
+      point I'll have a dedicated section for it on this website.
+- [blog describing all that stuff ☝️](/blog)
 
 ## Credits
 - I got these wordart styles from 

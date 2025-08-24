@@ -5,7 +5,7 @@ import markdown
 
 
 def load_blog_entries():
-    blog_files = os.listdir("okstupid/ev_blog")
+    blog_files = os.listdir("okstupid/blog")
     dates_to_files  ={
         datetime.strptime(os.path.splitext(fname)[0], "%m-%d-%Y"): fname
         for fname in blog_files
@@ -19,7 +19,7 @@ def generate_blog_nav_md():
     text = ""
 
     for date in sorted(dates_to_files.keys()):
-        link_url = f"/ev/blog/{date.strftime('%m-%d-%Y')}"
+        link_url = f"/blog/{date.strftime('%m-%d-%Y')}"
         md_line = f"- [{date.strftime('%m-%d-%Y')}'s entry]({link_url})"
         text += md_line + "\n"
     return text
@@ -48,7 +48,7 @@ def get_next_entry_button_html(next_date: datetime) -> str:
 
 
 def get_blog_url(blog_date: datetime) -> str:
-    return f"/ev/blog/{blog_date.strftime('%m-%d-%Y')}"
+    return f"/blog/{blog_date.strftime('%m-%d-%Y')}"
 
 
 def render_link(blog_date: datetime):
