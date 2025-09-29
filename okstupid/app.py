@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 import random
 
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template
 import json
 import markdown
 import plotly.graph_objects as go
@@ -23,7 +23,8 @@ app.register_blueprint(MEMES, url_prefix="/memes")
 _TRACKS = {
     "space lion": "WKnVaDwUg5s",  # Yoko Kanno
     "welcome to my life": "r0U0AlLVqpk",
-    "mr rogers theme": "FhAJnx5uwUU"
+    "mr rogers theme": "FhAJnx5uwUU",
+    "roast chestnut": "_o10Ic-iroQ"
 }
 
 
@@ -117,13 +118,22 @@ def blog_():
 @app.route("/blog/<blog_date>")
 def get_blog_page(blog_date):
     with open(os.path.join("okstupid/blog", blog_date) + ".md", 'r') as fh:
+        config = {}
+        for line in fh:
+            line = line.strip()
+            if line == "":
+                break
+
+            config_key, config_val = line.split(":", 1)
+            config[config_key.strip()] = config_val.strip()
+
         html = markdown.markdown(fh.read())
 
     blog_date_dt = datetime.strptime(blog_date, "%m-%d-%Y")
     blog_nav_txt = markdown.markdown(blog.generate_blog_nav_md())
     blog_nav_buttons = blog.generate_nav_buttons(blog_date_dt)
 
-    song = random.choice(list(_TRACKS.keys()))
+    song = config.get("song", random.choice(list(_TRACKS.keys())))
 
     return render_template(
         "blog.html",
@@ -132,6 +142,14 @@ def get_blog_page(blog_date):
         mkd_text=html,
         nav_buttons=blog_nav_buttons,
         music_id=_TRACKS[song]
+    )
+
+
+@app.route("/karaoke-list")
+def karaoke_list():
+    return redirect(
+        "https://music.youtube.com/playlist?list=PLowuBbuIg1YINrsTBchxyk0eB-0pT3OYp&si=x-teddp5rRcUjyVg",
+        code=307,
     )
 
 

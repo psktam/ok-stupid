@@ -301,4 +301,4 @@ build _over_.
 ## What's Next
 At this point, I've catalogued pretty much everything worth talking about in 
 this build so far, so I'm going to switch formats from this overarching
-expository style to a blog format. You can catch up on that [here](/ev/blog).
+expository style to a blog format. You can catch up on that [here](/blog).
