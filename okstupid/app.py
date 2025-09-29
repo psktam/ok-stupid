@@ -124,8 +124,11 @@ def get_blog_page(blog_date):
             if line == "":
                 break
 
-            config_key, config_val = line.split(":", 1)
-            config[config_key.strip()] = config_val.strip()
+            try:
+                config_key, config_val = line.split(":", 1)
+                config[config_key.strip()] = config_val.strip()
+            except ValueError:
+                break
 
         html = markdown.markdown(fh.read())
 
