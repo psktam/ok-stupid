@@ -227,7 +227,9 @@ def create_blog_post():
     else:
         track_tag = request.form["track"]
     entry = blog.BlogEntry(
-        create_date=datetime.now(), title=request.form["title"], track_tag=track_tag
+        create_date=datetime.strptime(request.form["create_date"], "%Y-%m-%d"),
+        title=request.form["title"],
+        track_tag=track_tag,
     )
     entry.insert_new_blog_entry(con, request.form["content"])
     return redirect(
