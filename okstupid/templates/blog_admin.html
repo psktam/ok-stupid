@@ -1,0 +1,43 @@
+<title>{{title}}</title>
+<head>
+    <link rel="stylesheet" href="/static/wordart.scss">
+    <link rel="stylesheet" href="/static/general.css">
+    <link rel="stylesheet" href="/static/blog-style.css">
+    <script src="/static/scripts/yt_playbutton.js"></script>
+</head>
+
+<style>
+    body {
+        background-image: url('/static/maxie-boi.gif');
+        font-family: "Comic Sans MS";
+    }
+</style>
+
+<body>
+
+  <div class="content">
+    <h1>Current Entries</h1>
+    <ul id="current_entries">
+      {% for item in blog_entries %}
+      <li>{{item.title}} 
+        <a href="/blog/entry-{{item.id}}">view</a> 
+        <a href="/blog/entry-{{item.id}}/edit">edit</a> delete</li>
+      {% endfor %}
+
+      <li>Add a new entry</li>
+    </ul>
+  </div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<div style="position: fixed; bottom: 0px; background: green">
+    Go back <a href="/">home 🏠</a> || Play Music! 👉
+    <div
+        data-video={{music_id | safe}}
+        data-autoplay="0"
+        data-loop="1"
+        id="youtube-audio"
+        style="display:inline"
+    ></div>
+</div>
+</br>
+</body>

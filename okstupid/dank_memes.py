@@ -15,29 +15,21 @@ Peruse the dank memes here.
 
 - [Selkirk](/memes/selkirk)
 - [Crustard](/memes/crustard)
-        """)
+        """),
     )
 
 
 @MEMES.route("/selkirk")
 def selkirk():
-    with open("okstupid/static/markdowns/selkirk.md", 'r') as fh:
+    with open("okstupid/static/markdowns/selkirk.md", "r") as fh:
         html = markdown.markdown(fh.read())
 
-    return render_template(
-        "main.html",
-        title="Selkirk the cat",
-        mkd_text=html
-    )
+    return render_template("main.html", title="Selkirk the cat", mkd_text=html)
 
 
 @MEMES.route("/crustard")
 def crustard():
-    with open("okstupid/static/markdowns/crustard.md", 'r') as fh:
+    with open("okstupid/static/markdowns/crustard.md", "r") as fh:
         html = markdown.markdown(fh.read())
-    
-    return render_template(
-        "main.html",
-        title="Crustard",
-        mkd_text=html
-    )
+
+    return render_template("main.html", title="Crustard", mkd_text=html)

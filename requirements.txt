@@ -1,5 +1,6 @@
 arguably
 flask==3.0.0
+flask-login
 gunicorn
 markdown
 numpy
