@@ -20,8 +20,19 @@
   {% else %}
     <form action="/blog/create_new" method="POST">
   {% endif %}
-  <!-- <form action="/blog/{{blog_id}}/save" method="POST"> -->
     Title: <textarea name="title">{{title}}</textarea>
+    <label for="create_date">Create Date:</label>
+    <input type="date" name="create_date" value={{create_date}}>
+    Track: <select name="track">
+      <option value="--NONE--"> no track set </option>
+      {% for track in available_tracks %}
+        {% if track_tag == track %}
+          <option value="{{track}}" selected="selected">{{track}}</option>
+        {% else %}
+          <option value="{{track}}">{{track}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
     <textarea id="markdown-editor" name="content">{{initial_text}}</textarea>
     <button type="submit">Save Content</button>
   </form>

@@ -10,6 +10,7 @@ class BlogEntry:
     create_date: datetime
     title: str
     id: Optional[int] = None
+    track_tag: Optional[str] = None
 
     def _create_date_as_str(self) -> str:
         return self.create_date.strftime("%Y-%m-%d %H:%M:%S")
@@ -31,7 +32,8 @@ class BlogEntry:
             id INTEGER PRIMARY KEY ASC, 
             title TEXT,
             date TEXT,
-            raw_text TEXT
+            raw_text TEXT,
+            track_tag TEXT
         )""")
         con.commit()
         cursor.close()
@@ -39,8 +41,8 @@ class BlogEntry:
     def insert_new_blog_entry(self, con: sql.Connection, text: str):
         cursor = con.cursor()
         cursor.execute(f"""
-        INSERT INTO blog_entries(date, title, raw_text)
-        VALUES('{self._create_date_as_str()}', '{self.title}', '{text.replace("'", "''")}')
+        INSERT INTO blog_entries(date, title, raw_text, track_tag)
+        VALUES('{self._create_date_as_str()}', '{self.title}', '{text.replace("'", "''")}', '{self.track_tag}')
         """)
         self.id = cursor.lastrowid
         con.commit()
@@ -52,7 +54,8 @@ class BlogEntry:
         UPDATE blog_entries 
         SET date='{self._create_date_as_str()}',
             raw_text='{text.replace("'", "''")}',
-            title='{self.title}'
+            title='{self.title}',
+            track_tag='{self.track_tag}'
         WHERE id={self.id}
         """)
         con.commit()
@@ -62,24 +65,30 @@ class BlogEntry:
     def load(cls, con: sql.Connection, blog_id: int):
         cursor = con.cursor()
         cursor.execute(f"""
-        SELECT title, date, raw_text FROM blog_entries WHERE id={blog_id}
+        SELECT title, date, raw_text, track_tag FROM blog_entries WHERE id={blog_id}
         """)
-        title, create_date_txt, raw_text = cursor.fetchone()
+        title, create_date_txt, raw_text, track_tag = cursor.fetchone()
         cursor.close()
         return BlogEntry(
-            create_date=cls.parse_create_date(create_date_txt), title=title, id=blog_id
+            create_date=cls.parse_create_date(create_date_txt),
+            title=title,
+            id=blog_id,
+            track_tag=track_tag,
         ), raw_text
 
     @classmethod
     def load_only_blog_entry(cls, con: sql.Connection, blog_id: int):
         cursor = con.cursor()
         cursor.execute(f"""
-        SELECT title, date FROM blog_entries WHERE id={blog_id}
+        SELECT title, date, track_tag FROM blog_entries WHERE id={blog_id}
         """)
-        title, create_date_txt = cursor.fetchone()
+        title, create_date_txt, track_tag = cursor.fetchone()
         cursor.close()
         return BlogEntry(
-            create_date=cls.parse_create_date(create_date_txt), title=title, id=blog_id
+            create_date=cls.parse_create_date(create_date_txt),
+            title=title,
+            id=blog_id,
+            track_tag=track_tag,
         )
 
 
@@ -89,12 +98,17 @@ def get_sql_connection():
 
 def load_blog_entries(con: sql.Connection):
     cursor = con.cursor()
-    cursor.execute("SELECT id, title, date FROM blog_entries")
+    cursor.execute("SELECT id, title, date, track_tag FROM blog_entries")
     entries = cursor.fetchall()
     cursor.close()
     return [
-        BlogEntry(id=db_id, title=title, create_date=BlogEntry.parse_create_date(date))
-        for (db_id, title, date) in entries
+        BlogEntry(
+            id=db_id,
+            title=title,
+            create_date=BlogEntry.parse_create_date(date),
+            track_tag=track_tag,
+        )
+        for (db_id, title, date, track_tag) in entries
     ]
 
 

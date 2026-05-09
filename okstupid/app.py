@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
 from flask import Flask, redirect, render_template, request
-from io import StringIO
 import json
 import random
 
@@ -148,29 +147,15 @@ def get_blog_page(blog_id_slug: str):
     blog_id = int(blog_id_slug[6:])
     con = blog.get_sql_connection()
     blog_entry, raw_text = blog.BlogEntry.load(con, blog_id)
-    config = {}
 
-    # TODO: get rid of this fuck-ugly song configuration
-    raw_text_io = StringIO(raw_text)
-    last_pos = raw_text_io.tell()
-    for line in raw_text_io:
-        line = line.strip()
-        if line == "":
-            break
-
-        try:
-            config_key, config_val = line.split(":", 1)
-            config[config_key.strip()] = config_val.strip()
-        except ValueError:
-            raw_text_io.seek(last_pos)
-            break
-        last_pos = raw_text_io.tell()
-
-    html = markdown.markdown(raw_text_io.read())
+    html = markdown.markdown(raw_text)
     blog_nav_txt = markdown.markdown(blog.generate_blog_nav_md())
     blog_nav_buttons = blog.generate_nav_buttons(blog_entry.create_date)
 
-    song = config.get("song", random.choice(list(resources.TRACKS.keys())))
+    if blog_entry.track_tag is None:
+        song = random.choice(list(resources.TRACKS.keys()))
+    else:
+        song = blog_entry.track_tag
 
     return render_template(
         "blog.html",
@@ -191,6 +176,9 @@ def edit_blog_page(blog_id_slug: str):
     return render_template(
         "blog_edit_page.html",
         title=blog_entry.title,
+        track_tag=blog_entry.track_tag,
+        create_date=blog_entry.create_date.strftime("%Y-%m-%d"),
+        available_tracks=sorted(resources.TRACKS.keys()),
         blog_id=blog_id_slug,
         initial_text=raw_text,
     )
@@ -203,6 +191,13 @@ def save_blog_page(blog_id_slug: str):
     con = blog.get_sql_connection()
     blog_entry = blog.BlogEntry.load_only_blog_entry(con, blog_id)
     blog_entry.title = request.form["title"]
+    blog_entry.create_date = datetime.strptime(request.form["create_date"], "%Y-%m-%d")
+    if request.form["track"] not in resources.TRACKS:
+        track_tag = None
+    else:
+        track_tag = request.form["track"]
+    blog_entry.track_tag = track_tag
+
     blog_entry.update_blog_entry(con, request.form["content"])
 
     return redirect(
@@ -213,7 +208,13 @@ def save_blog_page(blog_id_slug: str):
 @app.route("/blog/add")
 def add_blog_page():
     return render_template(
-        "blog_edit_page.html", title="Title", blog_id="", initial_text=""
+        "blog_edit_page.html",
+        title="Title",
+        track_tag=None,
+        create_date=datetime.now().strftime("%Y-%m-%d"),
+        available_tracks=sorted(resources.TRACKS.keys()),
+        blog_id="",
+        initial_text="",
     )
 
 
@@ -221,7 +222,13 @@ def add_blog_page():
 @flask_login.login_required
 def create_blog_post():
     con = blog.get_sql_connection()
-    entry = blog.BlogEntry(create_date=datetime.now(), title=request.form["title"])
+    if request.form["track"] not in resources.TRACKS:
+        track_tag = None
+    else:
+        track_tag = request.form["track"]
+    entry = blog.BlogEntry(
+        create_date=datetime.now(), title=request.form["title"], track_tag=track_tag
+    )
     entry.insert_new_blog_entry(con, request.form["content"])
     return redirect(
         flask.url_for("edit_blog_page", blog_id_slug=f"entry-{entry.id}"), code=302
