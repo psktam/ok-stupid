@@ -39,8 +39,8 @@ class BlogEntry:
     def insert_new_blog_entry(self, con: sql.Connection, text: str):
         cursor = con.cursor()
         cursor.execute(f"""
-        INSERT INTO blog_entries(date, raw_text)
-        VALUES('{self._create_date_as_str()}', '{text.replace("'", "''")}')
+        INSERT INTO blog_entries(date, title, raw_text)
+        VALUES('{self._create_date_as_str()}', '{self.title}', '{text.replace("'", "''")}')
         """)
         self.id = cursor.lastrowid
         con.commit()
@@ -96,3 +96,10 @@ def load_blog_entries(con: sql.Connection):
         BlogEntry(id=db_id, title=title, create_date=BlogEntry.parse_create_date(date))
         for (db_id, title, date) in entries
     ]
+
+
+def delete_blog_entry(con: sql.Connection, blog_id: int):
+    cursor = con.cursor()
+    cursor.execute(f"DELETE FROM blog_entries WHERE id={blog_id}")
+    con.commit()
+    cursor.close()

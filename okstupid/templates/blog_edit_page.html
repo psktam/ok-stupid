@@ -15,11 +15,20 @@
 
 <body>
 
-  <form action="/blog/{{blog_id}}/save" method="POST">
+  {% if blog_id %}
+    <form action="/blog/{{blog_id}}/save" method="POST">
+  {% else %}
+    <form action="/blog/create_new" method="POST">
+  {% endif %}
+  <!-- <form action="/blog/{{blog_id}}/save" method="POST"> -->
+    Title: <textarea name="title">{{title}}</textarea>
     <textarea id="markdown-editor" name="content">{{initial_text}}</textarea>
     <button type="submit">Save Content</button>
   </form>
-  <a href="/blog/{{blog_id}}">view</a>
+  {% if blog_id %}
+    <a href="/blog/{{blog_id}}">view</a>
+  {% endif %}
+  <a href="/blog/admin">back to admin</a>
 
   <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/markdown-text-editor@1.0.1/dist/markdown-text-editor.min.js"></script> -->
   <script type="module" src="/static/node_modules/markdown-text-editor/dist/markdown-text-editor.umd.js"></script>

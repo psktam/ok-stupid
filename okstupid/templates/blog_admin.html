@@ -21,10 +21,12 @@
       {% for item in blog_entries %}
       <li>{{item.title}} 
         <a href="/blog/entry-{{item.id}}">view</a> 
-        <a href="/blog/entry-{{item.id}}/edit">edit</a> delete</li>
+        <a href="/blog/entry-{{item.id}}/edit">edit</a> 
+        <a href="/blog/entry-{{item.id}}/delete">delete</a>
+      </li>
       {% endfor %}
 
-      <li>Add a new entry</li>
+      <li><a href="/blog/add">Add a new entry</a></li>
     </ul>
   </div>
 

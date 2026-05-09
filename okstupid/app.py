@@ -202,11 +202,39 @@ def save_blog_page(blog_id_slug: str):
     blog_id = int(blog_id_slug[6:])
     con = blog.get_sql_connection()
     blog_entry = blog.BlogEntry.load_only_blog_entry(con, blog_id)
+    blog_entry.title = request.form["title"]
     blog_entry.update_blog_entry(con, request.form["content"])
 
     return redirect(
         flask.url_for("edit_blog_page", blog_id_slug=blog_id_slug), code=302
     )
+
+
+@app.route("/blog/add")
+def add_blog_page():
+    return render_template(
+        "blog_edit_page.html", title="Title", blog_id="", initial_text=""
+    )
+
+
+@app.route("/blog/create_new", methods=["POST"])
+@flask_login.login_required
+def create_blog_post():
+    con = blog.get_sql_connection()
+    entry = blog.BlogEntry(create_date=datetime.now(), title=request.form["title"])
+    entry.insert_new_blog_entry(con, request.form["content"])
+    return redirect(
+        flask.url_for("edit_blog_page", blog_id_slug=f"entry-{entry.id}"), code=302
+    )
+
+
+@app.route("/blog/<blog_id_slug>/delete")
+@flask_login.login_required
+def delete_blog_entry(blog_id_slug: str):
+    blog_id = int(blog_id_slug[6:])
+    con = blog.get_sql_connection()
+    blog.delete_blog_entry(con, blog_id)
+    return redirect("/blog/admin")
 
 
 @app.route("/karaoke-list")
