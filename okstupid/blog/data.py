@@ -55,7 +55,7 @@ class BlogEntry:
         SET date='{self._create_date_as_str()}',
             raw_text='{text.replace("'", "''")}',
             title='{self.title}',
-            track_tag='{self.track_tag}'
+            track_tag={("'" + self.track_tag + "'") if self.track_tag is not None else "null"}
         WHERE id={self.id}
         """)
         con.commit()
