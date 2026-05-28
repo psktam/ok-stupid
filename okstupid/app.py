@@ -9,24 +9,30 @@ import flask_login
 import markdown
 import plotly.graph_objects as go
 from werkzeug.middleware.proxy_fix import ProxyFix
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
 import yaml
 
 from . import blog
 from . import login as app_login
 from .dank_memes import MEMES
 from . import resources
+from . import maps_app
 
 
-app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
-app.register_blueprint(MEMES, url_prefix="/memes")
-app.secret_key = "super secret string"
-
+flask_app = Flask(__name__)
+flask_app.wsgi_app = ProxyFix(
+    flask_app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+)
+flask_app.register_blueprint(MEMES, url_prefix="/memes")
+flask_app.secret_key = "super secret string"
 login_manager = app_login.get_login_manager()
-login_manager.init_app(app)
+login_manager.init_app(flask_app)
+
+app = DispatcherMiddleware(flask_app, {"/isds": maps_app.app.server})
+maps_app.main()
 
 
-@app.route("/")
+@flask_app.route("/")
 def main():
     with open("okstupid/static/markdowns/main_splash.md", "r") as fh:
         html = markdown.markdown(fh.read())
@@ -38,7 +44,7 @@ def main():
     )
 
 
-@app.get("/login")
+@flask_app.get("/login")
 def login_get():
     return """
     <form method=post>
@@ -49,7 +55,7 @@ def login_get():
     """
 
 
-@app.post("/login")
+@flask_app.post("/login")
 def login_post():
     user = app_login.users.get(request.form["username"])
     if user is None or user.password != request.form["password"]:
@@ -59,13 +65,13 @@ def login_post():
     return flask.redirect(flask.url_for("protected"))
 
 
-@app.route("/protected")
+@flask_app.route("/protected")
 @flask_login.login_required
 def protected():
     return f"""YOU ARE IN SECRET LAND! Logged in as {flask_login.current_user.id}"""
 
 
-@app.route("/cat")
+@flask_app.route("/cat")
 def cat():
     with open("okstupid/static/markdowns/cat.md", "r") as fh:
         html = markdown.markdown(fh.read())
@@ -78,7 +84,7 @@ def cat():
     )
 
 
-@app.route("/cat/freddi")
+@flask_app.route("/cat/freddi")
 def freddi():
     """
     Serve random images of Freddi
@@ -86,7 +92,7 @@ def freddi():
     return render_template("cat.html", music_id=resources.TRACKS["mr rogers theme"])
 
 
-@app.route("/blog/admin")
+@flask_app.route("/blog/admin")
 @flask_login.login_required
 def blog_admin():
     con = blog.get_sql_connection()
@@ -97,7 +103,7 @@ def blog_admin():
     )
 
 
-@app.route("/cat/freddi/new_image")
+@flask_app.route("/cat/freddi/new_image")
 def get_new_freddi_image():
     """
     API endpoint to just get a filename of freddi
@@ -119,7 +125,7 @@ def get_new_freddi_image():
     return json.dumps(img_spec)
 
 
-@app.route("/ev")
+@flask_app.route("/ev")
 def ev():
     with open("okstupid/static/markdowns/ev_conversion.md", "r") as fh:
         html = markdown.markdown(fh.read())
@@ -129,7 +135,7 @@ def ev():
     )
 
 
-@app.route("/blog")
+@flask_app.route("/blog")
 def blog_():
     # Generate a markdown string of a list of links of blog entries
     link_list = blog.generate_blog_nav_md()
@@ -142,7 +148,7 @@ def blog_():
     )
 
 
-@app.route("/blog/<blog_id_slug>")
+@flask_app.route("/blog/<blog_id_slug>")
 def get_blog_page(blog_id_slug: str):
     blog_id = int(blog_id_slug[6:])
     con = blog.get_sql_connection()
@@ -167,7 +173,7 @@ def get_blog_page(blog_id_slug: str):
     )
 
 
-@app.route("/blog/<blog_id_slug>/edit")
+@flask_app.route("/blog/<blog_id_slug>/edit")
 @flask_login.login_required
 def edit_blog_page(blog_id_slug: str):
     blog_id = int(blog_id_slug[6:])
@@ -184,7 +190,7 @@ def edit_blog_page(blog_id_slug: str):
     )
 
 
-@app.route("/blog/<blog_id_slug>/save", methods=["POST"])
+@flask_app.route("/blog/<blog_id_slug>/save", methods=["POST"])
 @flask_login.login_required
 def save_blog_page(blog_id_slug: str):
     blog_id = int(blog_id_slug[6:])
@@ -205,7 +211,7 @@ def save_blog_page(blog_id_slug: str):
     )
 
 
-@app.route("/blog/add")
+@flask_app.route("/blog/add")
 def add_blog_page():
     return render_template(
         "blog_edit_page.html",
@@ -218,7 +224,7 @@ def add_blog_page():
     )
 
 
-@app.route("/blog/create_new", methods=["POST"])
+@flask_app.route("/blog/create_new", methods=["POST"])
 @flask_login.login_required
 def create_blog_post():
     con = blog.get_sql_connection()
@@ -237,7 +243,7 @@ def create_blog_post():
     )
 
 
-@app.route("/blog/<blog_id_slug>/delete")
+@flask_app.route("/blog/<blog_id_slug>/delete")
 @flask_login.login_required
 def delete_blog_entry(blog_id_slug: str):
     blog_id = int(blog_id_slug[6:])
@@ -246,7 +252,7 @@ def delete_blog_entry(blog_id_slug: str):
     return redirect("/blog/admin")
 
 
-@app.route("/karaoke-list")
+@flask_app.route("/karaoke-list")
 def karaoke_list():
     return redirect(
         "https://music.youtube.com/playlist?list=PLowuBbuIg1YINrsTBchxyk0eB-0pT3OYp&si=x-teddp5rRcUjyVg",
@@ -254,7 +260,7 @@ def karaoke_list():
     )
 
 
-@app.route("/more-about-me")
+@flask_app.route("/more-about-me")
 def more_about_me():
     with open("okstupid/static/markdowns/more_about_me.md", "r") as fh:
         html = markdown.markdown(fh.read())
@@ -267,7 +273,7 @@ def more_about_me():
     )
 
 
-@app.route("/plotly-demo")
+@flask_app.route("/plotly-demo")
 def plotly_demo():
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=[0, 1, 2], y=[2, 1, 1]))

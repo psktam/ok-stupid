@@ -1,4 +1,9 @@
 arguably
+dash
+dash_bootstrap_components
+fastkml
+plotly
+shapely
 flask==3.0.0
 flask-login
 gunicorn
