@@ -191,8 +191,6 @@ def main():
         ),
     ]
 
-    # app.run(debug=False)
-
 
 @callback(
     Output("hd-output-graph", "figure"),
@@ -364,3 +362,4 @@ def plot_polygons(polygons):
 
 if __name__ == "__main__":
     main()
+    app.run(debug=False)
