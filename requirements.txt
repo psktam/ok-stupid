@@ -11,4 +11,5 @@ markdown
 numpy
 Pillow
 plotly
+polars
 pyyaml
