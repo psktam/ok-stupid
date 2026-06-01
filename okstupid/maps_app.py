@@ -250,9 +250,52 @@ def show_isd_map_for_selection(selected_data):
             [],
         )
 
-    intersecting_hds = []
     selected_isds = [elem["location"] for elem in selected_data["points"]]
+    hd_fig, sd_fig, hd_rows, sd_rows = _generate_common_selection_outputs(selected_isds)
+
+    global dont_update_map
+    dont_update_map = True
+    return hd_fig, sd_fig, hd_rows.to_dicts(), sd_rows.to_dicts(), selected_isds
+
+
+@callback(
+    Output("isd-selection-graph", "figure"),
+    Output("hd-output-graph", "figure"),
+    Output("sd-output-graph", "figure"),
+    Output("selected-hd-table", "data"),
+    Output("selected-sd-table", "data"),
+    Input("isd-selection-dropdown", "value"),
+)
+def update_isd_map_for_dropdown_selection(selected_isds):
+    intersecting_hds = []
     intersecting_sds = []
+    if selected_isds is None:
+        selected_isds = []
+    for isd in selected_isds:
+        intersecting_hds.extend(intersections["ISD to house"][isd])
+        intersecting_sds.extend(intersections["ISD to senate"][isd])
+    intersecting_hds = list(set(intersecting_hds))
+    intersecting_sds = list(set(intersecting_sds))
+
+    hd_fig, sd_fig, hd_rows, sd_rows = _generate_common_selection_outputs(selected_isds)
+    isd_to_index = {isd: idx for (idx, isd) in enumerate(sorted(isd_geo.keys()))}
+
+    global dont_update_map
+    if dont_update_map:
+        fig = no_update
+        dont_update_map = False
+    else:
+        fig = show_isd_map()
+        fig.update_traces(selectedpoints=[isd_to_index[isd] for isd in selected_isds])
+
+    return (fig, hd_fig, sd_fig, hd_rows.to_dicts(), sd_rows.to_dicts())
+
+
+def _generate_common_selection_outputs(selected_isds):
+    intersecting_hds = []
+    intersecting_sds = []
+    selected_isds = selected_isds or []
+
     for isd in selected_isds:
         intersecting_hds.extend(intersections["ISD to house"][isd])
         intersecting_sds.extend(intersections["ISD to senate"][isd])
@@ -262,7 +305,7 @@ def show_isd_map_for_selection(selected_data):
     hd_rows = house_members_csv.filter(
         ps.col("District").is_in({int(n.split()[1]) for n in intersecting_hds})
     )
-    sd_rows = house_members_csv.filter(
+    sd_rows = senate_members_csv.filter(
         ps.col("District").is_in({int(n.split()[1]) for n in intersecting_sds})
     )
 
@@ -285,61 +328,7 @@ def show_isd_map_for_selection(selected_data):
         merged_sd_geojsons, selected_isds, intersecting_sds
     )
 
-    global dont_update_map
-    dont_update_map = True
-    return hd_fig, sd_fig, hd_rows.to_dicts(), sd_rows.to_dicts(), selected_isds
-
-
-@callback(
-    Output("isd-selection-graph", "figure"),
-    Output("hd-output-graph", "figure"),
-    Output("sd-output-graph", "figure"),
-    Input("isd-selection-dropdown", "value"),
-)
-def update_isd_map_for_dropdown_selection(selected_isds):
-    intersecting_hds = []
-    intersecting_sds = []
-    if selected_isds is None:
-        selected_isds = []
-    for isd in selected_isds:
-        intersecting_hds.extend(intersections["ISD to house"][isd])
-        intersecting_sds.extend(intersections["ISD to senate"][isd])
-    intersecting_hds = list(set(intersecting_hds))
-    intersecting_sds = list(set(intersecting_sds))
-
-    hd_geojson = convert_polys_to_geojson(
-        {hd: house_geo[hd] for hd in intersecting_hds}
-    )
-    selected_isd_geojson = convert_polys_to_geojson(
-        {isd: isd_geo[isd] for isd in selected_isds}
-    )
-    merged_hd_geojsons = _merge_geojson_dicts(selected_isd_geojson, hd_geojson)
-    hd_fig = _make_lege_map_for_selection(
-        merged_hd_geojsons, selected_isds, intersecting_hds
-    )
-
-    sd_geojson = convert_polys_to_geojson(
-        {sd: senate_geo[sd] for sd in intersecting_sds}
-    )
-    merged_sd_geojsons = _merge_geojson_dicts(selected_isd_geojson, sd_geojson)
-    sd_fig = _make_lege_map_for_selection(
-        merged_sd_geojsons, selected_isds, intersecting_sds
-    )
-    isd_to_index = {isd: idx for (idx, isd) in enumerate(sorted(isd_geo.keys()))}
-
-    global dont_update_map
-    if dont_update_map:
-        fig = no_update
-        dont_update_map = False
-    else:
-        fig = show_isd_map()
-        fig.update_traces(selectedpoints=[isd_to_index[isd] for isd in selected_isds])
-
-    return (
-        fig,
-        hd_fig,
-        sd_fig,
-    )
+    return hd_fig, sd_fig, hd_rows, sd_rows
 
 
 def _make_lege_map_for_selection(hd_geojson, selected_isds, intersecting_hds):
