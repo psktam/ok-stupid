@@ -13,6 +13,14 @@ from shapely import (
 from shapely.geometry import shape
 
 
+def _data_file(filename: str) -> str:
+    return os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+        "data",
+        filename,
+    )
+
+
 def _make_process_function(extractor_func, _cache_path: str):
 
     def _fun(kml_path, cache_path: str = _cache_path):
@@ -109,7 +117,7 @@ def create_intersections_file(
     isd_geo,
     house_geo,
     senate_geo,
-    save_loc: str = "./data/intersections.json",
+    save_loc: str = _data_file("intersections.json"),
 ):
     if not os.path.exists(save_loc):
         isd_2_house, house_2_isd, isd_2_senate, senate_2_isd = create_intersection_map(
@@ -132,25 +140,25 @@ def create_intersections_file(
 
 
 process_isd_kml = _make_process_function(
-    extract_isd_geometry, "./data/parsed_isd_kml.json"
+    extract_isd_geometry, _data_file("parsed_isd_kml.json")
 )
 process_house_kml = _make_process_function(
-    extract_lege_geometry, "./data/parsed_house_kml.json"
+    extract_lege_geometry, _data_file("parsed_house_kml.json")
 )
 process_senate_kml = _make_process_function(
-    extract_lege_geometry, "./data/parsed_senate_kml.json"
+    extract_lege_geometry, _data_file("parsed_senate_kml.json")
 )
 
 print("processing KML files")
-isd_geo = process_isd_kml("./data/School_Districts_2026.kml")
-house_geo = process_house_kml("./data/PlanH2316.kml")
-senate_geo = process_senate_kml("./data/PlanS2168.kml")
+isd_geo = process_isd_kml(_data_file("School_Districts_2026.kml"))
+house_geo = process_house_kml(_data_file("PlanH2316.kml"))
+senate_geo = process_senate_kml(_data_file("PlanS2168.kml"))
 
 print("done processing KML. Loading intersections file")
 intersections = create_intersections_file(isd_geo, house_geo, senate_geo)
 print("loaded intersections file")
 
 print("Loading lege membership CSVs")
-house_members_csv = ps.read_csv("./data/house_89th_lege.csv")
-senate_members_csv = ps.read_csv("./data/senate_89th_lege.csv")
+house_members_csv = ps.read_csv(_data_file("house_89th_lege.csv"))
+senate_members_csv = ps.read_csv(_data_file("senate_89th_lege.csv"))
 print("Loaded lege members CSVs")

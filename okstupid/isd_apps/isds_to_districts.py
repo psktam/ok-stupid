@@ -1,6 +1,8 @@
 from dash import Dash, html, dcc, callback, Output, Input, no_update, dash_table
 import plotly.graph_objects as go
 import polars as ps
+from shapely.geometry import geo
+from . import geo_tools
 from . import resources
 
 
@@ -158,21 +160,21 @@ def _generate_common_selection_outputs(selected_isds):
         ps.col("District").is_in({int(n.split()[1]) for n in intersecting_sds})
     )
 
-    hd_geojson = convert_polys_to_geojson(
+    hd_geojson = geo_tools.convert_polys_to_geojson(
         {hd: resources.house_geo[hd] for hd in intersecting_hds}
     )
-    selected_isd_geojson = convert_polys_to_geojson(
+    selected_isd_geojson = geo_tools.convert_polys_to_geojson(
         {isd: resources.isd_geo[isd] for isd in selected_isds}
     )
-    merged_hd_geojsons = _merge_geojson_dicts(selected_isd_geojson, hd_geojson)
+    merged_hd_geojsons = geo_tools.merge_geojson_dicts(selected_isd_geojson, hd_geojson)
     hd_fig = _make_lege_map_for_selection(
         merged_hd_geojsons, selected_isds, intersecting_hds
     )
 
-    sd_geojson = convert_polys_to_geojson(
+    sd_geojson = geo_tools.convert_polys_to_geojson(
         {sd: resources.senate_geo[sd] for sd in intersecting_sds}
     )
-    merged_sd_geojsons = _merge_geojson_dicts(selected_isd_geojson, sd_geojson)
+    merged_sd_geojsons = geo_tools.merge_geojson_dicts(selected_isd_geojson, sd_geojson)
     sd_fig = _make_lege_map_for_selection(
         merged_sd_geojsons, selected_isds, intersecting_sds
     )
@@ -206,7 +208,7 @@ def show_isd_map():
             "autosize": False,
         }
     )
-    isd_geojson = convert_polys_to_geojson(resources.isd_geo)
+    isd_geojson = geo_tools.convert_polys_to_geojson(resources.isd_geo)
     trace = go.Choropleth(
         showscale=False,
         geojson=isd_geojson,
@@ -217,90 +219,6 @@ def show_isd_map():
     fig.add_trace(trace)
     fig.update_geos(fitbounds="locations")
     return fig
-
-
-def convert_polys_to_geojson(polys):
-    features = []
-    for key, polygon in polys.items():
-        features.append(
-            {"type": "Feature", "geometry": polygon.__geo_interface__, "id": key}
-        )
-    return {"type": "FeatureCollection", "features": features}
-
-
-def _merge_geojson_dicts(dict1, dict2):
-    features = dict1["features"] + dict2["features"]
-    return {"type": "FeatureCollection", "features": features}
-
-
-# def plot_polygon(name, shape):
-#     if isinstance(shape, sPolygon):
-#         points = np.array(shape.exterior.coords)
-#         return go.Scattermap(
-#             lon=points[:, 0],
-#             lat=points[:, 1],
-#             marker={"size": 0},
-#             fill="toself",
-#             visible="legendonly",
-#             name=name,
-#         )
-#     elif isinstance(shape, sMultiPolygon):
-#         lons = []
-#         lats = []
-#
-#         for subshape in shape.geoms:
-#             for point in subshape.exterior.coords:
-#                 lons.append(point[0])
-#                 lats.append(point[1])
-#             lons.append(None)
-#             lats.append(None)
-#
-#         if len(lons) > 0:
-#             lons.pop()
-#             lats.pop()
-#         return go.Scattermap(
-#             lon=lons,
-#             lat=lats,
-#             marker={"size": 0},
-#             fill="toself",
-#             visible="legendonly",
-#             name=name,
-#         )
-#
-#     raise ValueError(f"no plotting defined for object of type {type(shape)}")
-#
-#
-# def plot_polygons(polygons):
-#     lons = []
-#     lats = []
-#     for polygon in polygons:
-#         if isinstance(polygon, sPolygon):
-#             for point in polygon.exterior.coords:
-#                 lons.append(point[0])
-#                 lats.append(point[1])
-#             lons.append(None)
-#             lats.append(None)
-#         elif isinstance(polygon, sMultiPolygon):
-#             for shape in polygon.geoms:
-#                 for point in shape.exterior.coords:
-#                     lons.append(point[0])
-#                     lats.append(point[1])
-#                 lons.append(None)
-#                 lats.append(None)
-#         else:
-#             raise ValueError(
-#                 f"no plotting function defined for object of type {type(polygon)}"
-#             )
-#     if len(lons) > 0:
-#         lons.pop()
-#         lats.pop()
-#
-#     return go.Scattermap(
-#         fill="toself",
-#         lon=lons,
-#         lat=lats,
-#         marker={"size": 0},
-#     )
 
 
 if __name__ == "__main__":
