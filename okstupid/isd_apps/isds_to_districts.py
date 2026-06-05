@@ -1,7 +1,7 @@
 from dash import Dash, html, dcc, callback, Output, Input, no_update, dash_table
 import plotly.graph_objects as go
 import polars as ps
-from shapely.geometry import geo
+
 from . import geo_tools
 from . import resources
 

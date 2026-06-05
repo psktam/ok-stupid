@@ -44,10 +44,9 @@ def initialize():
                         html.H3("overlapping ISDs"),
                         dcc.Graph(id="isd-output-graph"),
                         dash_table.DataTable(
-                            id="selected-isd-table", sort_action="native"
-                        ),
-                        dash_table.DataTable(
-                            id="selected-hd-table", sort_action="native"
+                            id="selected-hd-table",
+                            sort_action="native",
+                            style_data={"whiteSpace": "normal", "height": "auto"},
                         ),
                     ]
                 )
@@ -61,7 +60,6 @@ update_map = True
 
 @callback(
     Output("isd-output-graph", "figure", allow_duplicate=True),
-    Output("selected-isd-table", "data", allow_duplicate=True),
     Output("selected-hd-table", "data", allow_duplicate=True),
     Output("hd-selection-dropdown", "value", allow_duplicate=True),
     Input("hd-selection-graph", "selectedData"),
@@ -75,14 +73,11 @@ def update_isd_map_for_hd_map_selection(selected_data):
         return go.Figure(layout={"width": 900}), [], [], []
 
     selected_hds = [elem["location"] for elem in selected_data["points"]]
-    isd_fig, intersecting_isds, hd_rows = _generate_common_selection_outputs(
-        selected_hds
-    )
+    isd_fig, _, hd_rows = _generate_common_selection_outputs(selected_hds)
     global update_map
     update_map = False
     return (
         isd_fig,
-        [{"District": isd} for isd in intersecting_isds],
         hd_rows.to_dicts(),
         selected_hds,
     )
@@ -90,7 +85,6 @@ def update_isd_map_for_hd_map_selection(selected_data):
 
 @callback(
     Output("isd-output-graph", "figure"),
-    Output("selected-isd-table", "data"),
     Output("selected-hd-table", "data"),
     Output("hd-selection-graph", "figure"),
     Input("hd-selection-dropdown", "value"),
@@ -100,9 +94,7 @@ def update_hd_map_for_dropdown_selection(selected_hds):
     Update graphics when selection(s) is made via the dropdown menu
     """
     selected_hds = selected_hds or []
-    isd_fig, intersecting_isds, hd_rows = _generate_common_selection_outputs(
-        selected_hds
-    )
+    isd_fig, _, hd_rows = _generate_common_selection_outputs(selected_hds)
 
     all_hd_geojson = geo_tools.convert_polys_to_geojson(resources.house_geo)
     hd_fig = go.Figure()
@@ -119,10 +111,10 @@ def update_hd_map_for_dropdown_selection(selected_hds):
         hd: idx for (idx, hd) in enumerate(sorted(resources.house_geo.keys()))
     }
     hd_fig.update_traces(selectedpoints=[hd_to_index[hd] for hd in selected_hds])
+    hd_fig.update_layout(width=900, height=500, margin={p: 0 for p in "lrbt"})
 
     return (
         isd_fig,
-        [{"District": isd} for isd in intersecting_isds],
         hd_rows.to_dicts(),
         hd_fig,
     )
@@ -141,8 +133,18 @@ def _generate_common_selection_outputs(selected_hds):
         )
     )
 
+    int_key_hd_intersections = {
+        int(k.split()[1]): sorted(v.keys())
+        for (k, v) in resources.intersections["house to ISD"].items()
+    }
     hd_rows = resources.house_members_csv.filter(
         ps.col("District").is_in({int(n.split()[1]) for n in selected_hds})
+    )
+    hd_rows = hd_rows.with_columns(
+        ps.col("District")
+        .replace_strict(int_key_hd_intersections, default=[])
+        .list.join(",")
+        .alias("Intersecting ISDs")
     )
 
     isd_geojson = geo_tools.convert_polys_to_geojson(
