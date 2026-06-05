@@ -16,7 +16,7 @@ from . import blog
 from . import login as app_login
 from .dank_memes import MEMES
 from . import resources
-from .isd_apps import isds_to_districts
+from .isd_apps import isds_to_districts, districts_to_isds
 
 
 flask_app = Flask(__name__)
@@ -29,9 +29,14 @@ login_manager = app_login.get_login_manager()
 login_manager.init_app(flask_app)
 
 app = DispatcherMiddleware(
-    flask_app, {"/isds-to-districts": isds_to_districts.app.server}
+    flask_app,
+    {
+        "/isds-to-districts": isds_to_districts.app.server,
+        "/districts-to-isds": districts_to_isds.app.server,
+    },
 )
 isds_to_districts.initialize()
+districts_to_isds.initialize()
 
 
 @flask_app.route("/")
