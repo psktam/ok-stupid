@@ -56,7 +56,15 @@
       'checklist', 
       'blockquote', 
       'link', 
-      'preview'
+      'preview',
+      {
+        image: {
+          fileInput: {
+            accept: ["png", "jpg", "jpeg", "gif", "bmp"],
+            uploadUrl: "/fileUpload",
+          }
+        }
+      }
     ],
   });
   </script>

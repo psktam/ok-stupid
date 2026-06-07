@@ -10,6 +10,7 @@ import markdown
 import plotly.graph_objects as go
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.utils import secure_filename
 import yaml
 
 from . import blog
@@ -70,6 +71,20 @@ def login_post():
 
     flask_login.login_user(user)
     return flask.redirect(flask.url_for("protected"))
+
+
+@flask_app.post("/fileUpload")
+@flask_login.login_required
+def file_upload():
+    """
+    Upload a file to the server
+    """
+
+    image_file = request.files["image_file"]
+    fname = f"/static/images/{secure_filename(image_file.filename)}"
+    image_file.save(f"okstupid{fname}")
+
+    return json.dumps({"success": True, "image_path": fname})
 
 
 @flask_app.route("/protected")
@@ -165,7 +180,7 @@ def get_blog_page(blog_id_slug: str):
     blog_nav_txt = markdown.markdown(blog.generate_blog_nav_md())
     blog_nav_buttons = blog.generate_nav_buttons(blog_entry.create_date)
 
-    if blog_entry.track_tag is None:
+    if blog_entry.track_tag is None or blog_entry.track_tag == "None":
         song = random.choice(list(resources.TRACKS.keys()))
     else:
         song = blog_entry.track_tag
