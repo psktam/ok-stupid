@@ -178,7 +178,7 @@ def get_blog_page(blog_id_slug: str):
 
     html = markdown.markdown(raw_text)
     blog_nav_txt = markdown.markdown(blog.generate_blog_nav_md())
-    blog_nav_buttons = blog.generate_nav_buttons(blog_entry.create_date)
+    blog_nav_buttons = blog.generate_nav_buttons(blog_entry)
 
     if blog_entry.track_tag is None or blog_entry.track_tag == "None":
         song = random.choice(list(resources.TRACKS.keys()))

@@ -40,36 +40,38 @@ def get_next_entry_button_html(next_entry: data.BlogEntry) -> str:
     """
 
 
-def render_link(blog_date: datetime):
-    return f"[{blog_date.strftime('%m-%d-%Y')}'s entry]({get_blog_url(blog_date)})"
-
-
-def generate_nav_buttons(blog_date: datetime):
+def generate_nav_buttons(entry: data.BlogEntry):
     nav_html = ""
-    prev_entry = get_previous_blog_entry(blog_date)
+    prev_entry = get_previous_blog_entry(entry)
     if prev_entry is not None:
         nav_html += get_prev_entry_button_html(prev_entry)
 
-    next_entry = get_next_blog_entry(blog_date)
+    next_entry = get_next_blog_entry(entry)
     if next_entry is not None:
         nav_html += get_next_entry_button_html(next_entry)
 
     return nav_html
 
 
-def get_previous_blog_entry(blog_date: datetime) -> data.BlogEntry | None:
+def get_previous_blog_entry(current_entry: data.BlogEntry) -> data.BlogEntry | None:
     db = data.get_sql_connection()
     all_entries = data.load_blog_entries(db)
-    for entry in sorted(all_entries, key=lambda e: e.create_date)[::-1]:
-        if entry.create_date < blog_date:
+    for entry in sorted(all_entries, key=lambda e: (e.create_date, e.id))[::-1]:
+        if (entry.create_date, entry.id) < (
+            current_entry.create_date,
+            current_entry.id,
+        ):
             return entry
     return None
 
 
-def get_next_blog_entry(blog_date: datetime) -> data.BlogEntry | None:
+def get_next_blog_entry(current_entry: data.BlogEntry) -> data.BlogEntry | None:
     db = data.get_sql_connection()
     all_entries = data.load_blog_entries(db)
-    for entry in sorted(all_entries, key=lambda e: e.create_date):
-        if entry.create_date > blog_date:
+    for entry in sorted(all_entries, key=lambda e: (e.create_date, e.id)):
+        if (entry.create_date, entry.id) >= (
+            current_entry.create_date,
+            current_entry.id,
+        ):
             return entry
     return None
