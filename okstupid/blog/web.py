@@ -69,7 +69,7 @@ def get_next_blog_entry(current_entry: data.BlogEntry) -> data.BlogEntry | None:
     db = data.get_sql_connection()
     all_entries = data.load_blog_entries(db)
     for entry in sorted(all_entries, key=lambda e: (e.create_date, e.id)):
-        if (entry.create_date, entry.id) >= (
+        if (entry.create_date, entry.id) > (
             current_entry.create_date,
             current_entry.id,
         ):
